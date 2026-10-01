@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ninth的提示词 | 5100+ 条实战 AI 提示词库</title>
+<meta name="description" content="Ninth的提示词——5100+ 条实战提示词，覆盖 AI 短剧、新媒体、AIGC，从剧本到运镜、出图到出片，一套方法论喂给 AI。">
+<style>
+:root {
+  --bg-color: #0a0a0c;
+  --surface-color: #121216;
+  --surface-hover: #1a1a22;
+  --accent-color: #e50914;
+  --text-main: #ffffff;
+  --text-muted: #a0a0aa;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif TC", "Songti SC", "SimSun", "Noto Serif", serif;
+  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); background: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+section { padding: 7rem 10%; }
+@media (max-width: 768px) { section { padding: 4rem 1.5rem; } }
+
+/* ---------- Header ---------- */
+header {
+  position: fixed; top: 0; left: 0; width: 100%; padding: 1.5rem 2rem;
+  display: flex; justify-content: space-between; align-items: center; z-index: 100;
+  background: linear-gradient(to bottom, rgba(10,10,12,0.85), rgba(10,10,12,0));
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.logo { font-weight: 700; font-size: 1.15rem; letter-spacing: 2px; }
+.logo span { color: var(--accent-color); }
+.header-right { display: flex; align-items: center; gap: 2.5rem; }
+nav ul { list-style: none; display: flex; gap: 1.8rem; }
+nav a { color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; transition: var(--transition); }
+nav a:hover, nav a.active { color: var(--text-main); }
+.social-links { display: flex; gap: 1.2rem; }
+.social-links a { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); transition: var(--transition); }
+.social-links a:hover { color: var(--accent-color); }
+@media (max-width: 900px) {
+  .header-right { gap: 1rem; }
+  .social-links { display: none; }
+}
+@media (max-width: 768px) {
+  header { padding: 1rem 1.5rem; flex-direction: column; gap: 0.8rem; }
+  nav ul { gap: 1rem; }
+  nav a { font-size: 0.8rem; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  height: 100vh; display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-start; padding: 0 10%; position: relative;
+  background: radial-gradient(circle at 80% 20%, rgba(229,9,20,0.09) 0%, transparent 55%);
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; line-height: 1.15;
+  letter-spacing: -1px; margin-bottom: 1.5rem; max-width: 820px; position: relative; z-index: 1;
+}
+.hero h1 em { font-style: normal; color: var(--accent-color); font-family: var(--font-serif); font-weight: 900; }
+.hero p {
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem); color: var(--text-muted);
+  max-width: 620px; margin-bottom: 2.5rem; font-weight: 300; line-height: 1.7; position: relative; z-index: 1;
+}
+.hero-decor {
+  position: absolute; right: 10%; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  color: var(--accent-color); font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800;
+  font-family: var(--font-serif); line-height: 1.1; user-select: none; z-index: 0;
+  text-shadow: 0 10px 30px rgba(229,9,20,0.18); opacity: 0.85;
+}
+.hero-scroll { position: absolute; bottom: 2.5rem; left: 10%; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; }
+.hero-scroll::after { content: ''; display: block; width: 1px; height: 48px; background: linear-gradient(to bottom, var(--accent-color), transparent); margin-top: 0.8rem; }
+@media (max-width: 768px) { .hero-decor { right: 5%; opacity: 0.4; } }
+
+/* ---------- Section title ---------- */
+.section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent-color); margin-bottom: 3rem; font-weight: 700; }
+
+/* ---------- About ---------- */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.about-text p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.9; margin-bottom: 1.2rem; font-weight: 300; }
+.about-text p strong { color: var(--text-main); font-weight: 500; }
+.about-visual {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1; max-width: 380px; margin: 0 auto; overflow: hidden;
+}
+.about-visual::before {
+  content: ''; position: absolute; width: 140%; height: 140%;
+  background: conic-gradient(transparent, var(--accent-color), transparent 70%);
+  animation: rotate 9s linear infinite; opacity: 0.2; z-index: 1;
+}
+.about-visual::after { content: ''; position: absolute; inset: 18%; background: var(--bg-color); border-radius: 50%; z-index: 2; }
+.about-visual .avatar {
+  position: relative; z-index: 3; font-family: var(--font-serif); font-weight: 900;
+  font-size: clamp(4rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 40px rgba(229,9,20,0.35);
+}
+@keyframes rotate { to { transform: rotate(360deg); } }
+@media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+/* ---------- Showcase ---------- */
+.showcase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.card {
+  background-color: var(--surface-color); border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: var(--transition);
+}
+.card:hover { border-color: rgba(229,9,20,0.5); transform: translateY(-4px); }
+.card-img {
+  width: 100%; aspect-ratio: 16/9; background: #1a1a22; display: flex;
+  align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.card-img .bg { position: absolute; inset: 0; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+.card:hover .card-img .bg { transform: scale(1.08); }
+.card-img .emoji { position: relative; z-index: 2; font-size: 3.6rem; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5)); }
+.card-img .tag {
+  position: absolute; top: 1rem; left: 1rem; z-index: 2;
+  font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.75); background: rgba(10,10,12,0.55);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 0.3rem 0.8rem;
+  backdrop-filter: blur(6px);
+}
+.card-meta { padding: 1.5rem; }
+.card-meta h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.4rem; }
+.card-meta p { color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.5px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block; padding: 1rem 2.5rem; background-color: var(--text-main);
+  color: var(--bg-color); font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--text-main); cursor: pointer;
+  transition: var(--transition); font-family: var(--font-sans);
+}
+.btn:hover { background-color: var(--accent-color); border-color: var(--accent-color); color: #fff; transform: translateY(-2px); }
+.btn-ghost { background: transparent; color: var(--text-main); border-color: rgba(255,255,255,0.25); }
+.btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: var(--text-main); color: var(--text-main); }
+.btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* ---------- Platform ---------- */
+.platform-section { text-align: center; }
+.platform-btns { display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+
+/* ---------- Contact ---------- */
+.contact { text-align: center; padding: 8rem 10%; background: linear-gradient(to top, #0f0f12, var(--bg-color)); }
+.contact h2 { font-size: clamp(1.6rem, 3.2vw, 2.6rem); font-weight: 700; margin-bottom: 1.2rem; }
+.contact h2 em { font-style: normal; color: var(--accent-color); font-family: var(--font-serif); font-weight: 900; }
+.contact p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2.5rem; font-weight: 300; max-width: 620px; margin-left: auto; margin-right: auto; }
+.contact-qr { margin: 2.5rem auto 2rem; width: 140px; height: 140px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+.contact-qr img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.contact-qr-label { color: var(--text-muted); font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 1rem; }
+footer { padding: 2.5rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 1px; border-top: 1px solid rgba(255,255,255,0.04); }
+
+/* ---------- Modal ---------- */
+.modal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;
+  background-color: rgba(5,5,7,0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  display: flex; justify-content: center; align-items: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 2rem;
+}
+.modal.active { opacity: 1; pointer-events: auto; }
+.modal-wrapper {
+  background-color: var(--surface-color); width: 100%; max-width: 720px; max-height: 88vh;
+  border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); overflow-y: auto; position: relative;
+  transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+.modal.active .modal-wrapper { transform: translateY(0); }
+.modal-close {
+  position: absolute; top: 1.2rem; right: 1.4rem; background: none; border: none;
+  color: var(--text-muted); font-size: 1.8rem; cursor: pointer; line-height: 1; z-index: 10; transition: var(--transition);
+}
+.modal-close:hover { color: var(--accent-color); transform: rotate(90deg); }
+.modal-content { padding: 3rem; }
+.modal-header-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.modal-header-meta span {
+  font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color);
+  border: 1px solid rgba(229,9,20,0.4); border-radius: 20px; padding: 0.3rem 0.9rem;
+}
+.modal-content h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; margin-bottom: 1.5rem; }
+.modal-body p { color: var(--text-muted); font-size: 1rem; line-height: 1.9; margin-bottom: 1.2rem; font-weight: 300; }
+.modal-body .modal-list { list-style: none; margin-bottom: 1.5rem; }
+.modal-body .modal-list li { color: var(--text-muted); font-size: 0.95rem; line-height: 1.9; padding-left: 1.4rem; position: relative; }
+.modal-body .modal-list li::before { content: ''; position: absolute; left: 0; top: 0.85em; width: 6px; height: 6px; background: var(--accent-color); border-radius: 50%; }
+.modal-body .btn-row { margin-top: 2rem; }
+
+@media (max-width: 768px) {
+  .modal { padding: 1rem; }
+  .modal-content { padding: 2rem 1.5rem; }
+  .hero { padding: 0 1.5rem; }
+  .hero-scroll { left: 1.5rem; }
+}
+
+/* ---------- Works ---------- */
+.works-group { margin-bottom: 2.5rem; }
+.works-group h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.2rem; display: flex; align-items: center; gap: .6rem; }
+.works-group h3 .w-count { color: var(--text-muted); font-size: .8rem; font-weight: 400; }
+.works-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.video-card { background: var(--surface-color); border: 1px solid rgba(255,255,255,.04); border-radius: 8px; overflow: hidden; cursor: pointer; transition: var(--transition); }
+.video-card:hover { border-color: rgba(229,9,20,.5); transform: translateY(-3px); }
+.video-card .v-thumb { position: relative; aspect-ratio: 9/10; background: #1a1a22; overflow: hidden; }
+.video-card .v-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-card .v-thumb .v-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(10,10,12,.25); }
+.video-card .v-thumb .v-play span { width: 44px; height: 44px; border-radius: 50%; background: rgba(229,9,20,.9); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; padding-left: 2px; transition: var(--transition); }
+.video-card:hover .v-play span { transform: scale(1.15); }
+.video-card .v-meta { padding: .7rem .9rem; }
+.video-card .v-meta h4 { font-size: .82rem; font-weight: 600; line-height: 1.4; }
+.video-modal-body { padding: 1.5rem 1.5rem 1.8rem; }
+.video-modal-body .vm-meta { display: flex; gap: .6rem; margin-bottom: .8rem; }
+.video-modal-body .vm-meta span { font-size: .7rem; letter-spacing: 2px; color: var(--accent-color); border: 1px solid rgba(229,9,20,.4); border-radius: 20px; padding: .25rem .8rem; text-transform: uppercase; }
+.video-modal-body h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; }
+.video-wrap { width: 100%; background: #000; border-radius: 10px; overflow: hidden; }
+.video-wrap video { width: 100%; max-height: 60vh; display: block; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Ninth的<strong>提示词</strong><span>.</span></div>
+  <div class="header-right">
+    <nav>
+      <ul>
+        <li><a href="#home">首页</a></li>
+        <li><a href="#about">关于</a></li>
+        <li><a href="#project">内容</a></li>
+        <li><a href="#platform">工具</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </nav>
+    <div class="social-links">
+      <a href="prompts.html">提示词库</a>
+      <a href="https://github.com/s20260719559-sys/yqteach" target="_blank" rel="noopener">GitHub</a>
+      <a href="studio.html">Ninth 无线画布</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="home" class="hero">
+  <h1>从一句提示词，<br>到一部<em>能看</em>的作品。</h1>
+  <p>5100+ 条实战提示词，覆盖 AI 短剧、新媒体、AIGC——从剧本到运镜，从出图到出片。一套方法论，喂给 AI，长出真正能看的东西。</p>
+  <div class="hero-decor"><span>N</span><span>i</span><span>n</span><span>t</span><span>h</span></div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="section-title">01 / About</div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Ninth的提示词，是一套 <strong>AI 内容创作方法论库</strong>——把散落的知识，整理成可以直接上手、开箱即用的提示词模板。</p>
+      <p>收录 <strong>5100+ 条实战提示词</strong>，覆盖 AI 短剧创作、新媒体运营、AIGC 学习三大板块，按场景分类，从选题到脚本、从封面到成片都有对应模板。</p>
+      <p>还有 <strong>Ninth 无线画布</strong>——把 AI 生图、文本、视频全部装进一张无限画布，节点连线，从提示词到成片一气呵成。</p>
+    </div>
+    <div class="about-visual"><div class="avatar">N</div></div>
+  </div>
+</section>
+
+<!-- ============ PROJECT ============ -->
+<section id="project">
+  <div class="section-title">02 / Project</div>
+  <div class="showcase-grid">
+
+    <div class="card" data-modal-target="modal-6">
+      <div class="card-img">
+        <div class="bg" style="background: radial-gradient(circle at 30% 30%, rgba(229,9,20,0.4) 0%, transparent 60%), linear-gradient(135deg,#1a1216,#2a1418);"></div>
+        <div class="tag">提示词库</div><div class="emoji">📖</div>
+      </div>
+      <div class="card-meta"><h3>提示词库</h3><p>6 大类实战模板 · 57 个文件 · 开箱即用</p></div>
+    </div>
+
+    <div class="card" data-modal-target="modal-1">
+      <div class="card-img">
+        <div class="bg" style="background: radial-gradient(circle at 30% 30%, rgba(229,9,20,0.35) 0%, transparent 60%), linear-gradient(135deg,#1a1a22,#2a1216);"></div>
+        <div class="tag">内容库</div><div class="emoji">🎬</div>
+      </div>
+      <div class="card-meta"><h3>AI 短剧技巧</h3><p>8 大板块 · 53 条实战模板 · 从运镜到成片</p></div>
+    </div>
+
+    <div class="card" data-modal-target="modal-4">
+      <div class="card-img">
+        <div class="bg" style="background: radial-gradient(circle at 30% 30%, rgba(16,185,129,0.3) 0%, transparent 60%), linear-gradient(135deg,#141a12,#1e2a14);"></div>
+        <div class="tag">资源</div><div class="emoji">📦</div>
+      </div>
+      <div class="card-meta"><h3>共享资源</h3><p>工具链 · 素材库 · 算法对比 · 封面公式</p></div>
+    </div>
+
+    <div class="card" data-modal-target="modal-5">
+      <div class="card-img">
+        <div class="bg" style="background: radial-gradient(circle at 30% 30%, rgba(245,158,11,0.3) 0%, transparent 60%), linear-gradient(135deg,#1a1612,#2a1c10);"></div>
+        <div class="tag">职场</div><div class="emoji">💼</div>
+      </div>
+      <div class="card-meta"><h3>面试加油站</h3><p>新媒体 · 通用面试 · 漫剧导演/编导题库</p></div>
+    </div>
+
+    <div class="card" data-modal-target="modal-7">
+      <div class="card-img">
+        <div class="bg" style="background: radial-gradient(circle at 30% 30%, rgba(139,92,246,.4) 0%, transparent 60%), linear-gradient(135deg,#14141c,#2a1432);"></div>
+        <div class="tag">核心工具</div><div class="emoji">🧩</div>
+      </div>
+      <div class="card-meta"><h3>Ninth 无线画布</h3><p>无限画布 · 节点连线 · 文本→图片→视频流水线</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ WORKS ============ -->
+<section id="works">
+  <div class="section-title">03 / 作品展示</div>
+  <div id="worksApp"></div>
+</section>
+
+<!-- ============ PLATFORM ============ -->
+<section id="platform" class="platform-section">
+  <div class="section-title">快速上手</div>
+  <div class="platform-btns">
+    <a href="studio.html" class="btn">Ninth 无线画布</a>
+    <a href="ai-drama.html" class="btn">AI 短剧</a>
+    <a href="#home" class="btn btn-ghost">提示词库</a>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="contact">
+  <h2>让提示词，替你<em>讲故事</em>。</h2>
+  <p>短剧脚本 · 新媒体文案 · 出图出片——都给你备好了。<br>合作、投稿、交流，随时找我。</p>
+  <div class="btn-row" style="justify-content:center;">
+    <a href="https://github.com/s20260719559-sys/yqteach" target="_blank" rel="noopener" class="btn">GitHub 仓库</a>
+    <a href="#home" class="btn btn-ghost">开始逛</a>
+  </div>
+  <div class="contact-qr"><img src="qr-code.png" alt="Ninth微信二维码" onerror="this.parentElement.style.display='none'"></div>
+  <div class="contact-qr-label">微信扫码 · 找到Ninth</div>
+  <footer>
+    © 2026 Ninth的提示词 · Powered by GitHub Pages
+  </footer>
+</section>
+
+<!-- ============ MODALS ============ -->
+<div class="modal" id="modal-1">
+  <div class="modal-wrapper">
+    <button class="modal-close" aria-label="关闭">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header-meta"><span>内容库 · 创作方法论</span><span>53 条模板</span></div>
+      <h2>AI 短剧技巧</h2>
+      <div class="modal-body">
+        <p>从灵感、大纲到完整剧本，从分镜提示词到后期 BGM 与声音设计——一套端到端的 AI 短剧创作方法论。</p>
+        <ul class="modal-list">
+          <li>8 大板块 · 53 条实战提示词模板</li>
+          <li>运镜、角色、剧本、成片全流程覆盖</li>
+          <li>AI 视频分镜 · 多平台视频生成提示词</li>
+        </ul>
+        <div class="btn-row"><a href="ai-drama.html" class="btn">进入内容 →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-4">
+  <div class="modal-wrapper">
+    <button class="modal-close" aria-label="关闭">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header-meta"><span>资源汇总</span></div>
+      <h2>共享资源</h2>
+      <div class="modal-body">
+        <p>做 AI 内容需要的工具链、素材库与学习资料，一页汇总。从 FFmpeg 字幕指南到封面标题公式，全部整理好。</p>
+        <ul class="modal-list">
+          <li>FFmpeg 字幕指南 · AI 工具链速查</li>
+          <li>平台算法对比 · 封面标题公式</li>
+          <li>素材库 · 学习资料汇总</li>
+        </ul>
+        <div class="btn-row"><a href="resources.html" class="btn">进入资源 →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-6">
+  <div class="modal-wrapper">
+    <button class="modal-close" aria-label="关闭">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header-meta"><span>核心内容</span><span>57 个文件</span></div>
+      <h2>提示词库</h2>
+      <div class="modal-body">
+        <p>AI 运镜、人物、分镜剧本、场景道具、故事版、短视频——六大类实战提示词模板，全部整理成库，点开即用、可复制可下载。</p>
+        <ul class="modal-list">
+          <li>AI 运镜 · 电影级运镜公式与教程</li>
+          <li>人物 · 三视图 / 四视图 / 十二宫格 / 角色板</li>
+          <li>分镜剧本 · 小说改剧本 / 分镜模板 / Seedance</li>
+          <li>短视频 · 爆款文案 / 标题 / 种草 / IP 打造</li>
+        </ul>
+        <div class="btn-row"><a href="prompts.html" class="btn">进入提示词库 →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-5">
+  <div class="modal-wrapper">
+    <button class="modal-close" aria-label="关闭">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header-meta"><span>职场内容</span></div>
+      <h2>面试加油站</h2>
+      <div class="modal-body">
+        <p>新媒体运营岗位面试指南 + 通用面试方法论与表达框架，帮你把经验讲成优势。另有漫剧导演/编导专岗题库，适配 20k+ 岗位。</p>
+        <ul class="modal-list">
+          <li>漫剧导演+编导 · 84 道面试题含完整解析</li>
+          <li>新媒体运营 · 岗位面试指南与行业洞察</li>
+          <li>通用面试 · 方法论 · 表达框架 · 实战总结</li>
+        </ul>
+        <div class="btn-row">
+          <a href="manju-interview.html" class="btn">漫剧面试 →</a>
+          <a href="new-media.html" class="btn btn-ghost">新媒体面试 →</a>
+          <a href="interview-tips.html" class="btn btn-ghost">通用面试 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-7">
+  <div class="modal-wrapper">
+    <button class="modal-close" aria-label="关闭">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header-meta"><span>在线工具 · 进阶</span></div>
+      <h2>AI 工作室</h2>
+      <div class="modal-body">
+        <p>无限画布 + 节点连线工作流：把文本、图片、视频生成组织成一条流水线。文本节点写提示词 → 图片节点生成参考图 → 视频节点直接出片。</p>
+        <ul class="modal-list">
+          <li>无限画布 · 缩放平移 · 双击添加节点</li>
+          <li>节点连线 · 上游输出自动成为下游输入</li>
+          <li>一键跑全链 · 画布状态自动保存</li>
+        </ul>
+        <div class="btn-row"><a href="studio.html" class="btn">进入工作室 →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="videoModal">
+  <div class="modal-wrapper">
+    <button class="modal-close" onclick="closeVideoModal()" aria-label="关闭">&times;</button>
+    <div class="video-modal-body">
+      <div class="vm-meta"><span>作品展示</span></div>
+      <h2 id="vmTitle"></h2>
+      <div class="video-wrap"><video id="vmVideo" controls playsinline></video></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------- 滚动导航高亮 ----------
+const navLinks = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (pageYOffset >= sec.offsetTop - 160) current = sec.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href').includes(current));
+  });
+});
+
+// ---------- 弹窗引擎 ----------
+const bodyEl = document.body;
+function closeModal(modal) {
+  modal.classList.remove('active');
+  if (!document.querySelector('.modal.active')) bodyEl.style.overflow = '';
+}
+document.querySelectorAll('.card[data-modal-target]').forEach(card => {
+  card.addEventListener('click', () => {
+    const modal = document.getElementById(card.getAttribute('data-modal-target'));
+    if (modal) {
+      modal.classList.add('active');
+      bodyEl.style.overflow = 'hidden';
+    }
+  });
+});
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.querySelector('.modal-close').addEventListener('click', () => closeModal(modal));
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal.active').forEach(closeModal);
+});
+
+// ===================== 作品展示 =====================
+const WORKS = [
+  { title: '往届学生优秀短剧作品', dir: '学生作业', videos: [
+    { file: '1.mp4', name: '2608孙晓晴' },
+    { file: '2.mp4', name: '2068郭佳蕊' },
+    { file: '3.mp4', name: '2608孙晓晴' },
+  ]},
+  { title: '学生短视频优秀作品', dir: '学生短视频作业', videos: [
+    { file: '2608郭佳蕊.mp4', name: '2608郭佳蕊' },
+  ]},
+  { title: '课堂案例', dir: '课堂案例', videos: ['8月24日.mp4','8月25日.mp4','8月25日(1).mp4','8月25日(2).mp4','8月25日(3).mp4','8月25日(4).mp4','8月25日(5).mp4','8月25日(6).mp4','8月25日(7).mp4','8月25日(8).mp4','上岸第一剑.mp4'] },
+];
+const WORKS_ALL = [];
+WORKS.forEach(g => g.videos.forEach(f => {
+  const file = typeof f === 'string' ? f : f.file;
+  const name = typeof f === 'string' ? (g.title + ' · ' + f.replace('.mp4','')) : f.name;
+  WORKS_ALL.push({ g: g.title, dir: g.dir, file, title: name });
+}));
+function renderWorks() {
+  const el = document.getElementById('worksApp');
+  el.innerHTML = WORKS.map(g => `
+    <div class="works-group">
+      <h3>${g.title} <span class="w-count">${g.videos.length} 个</span></h3>
+      <div class="works-grid">
+        ${g.videos.map(f => {
+          const file = typeof f === 'string' ? f : f.file;
+          const i = WORKS_ALL.findIndex(w => w.file === file && w.dir === g.dir);
+          const encDir = encodeURI(g.dir), encF = encodeURI(file);
+          return `<div class="video-card" onclick="openVideo(${i})">
+            <div class="v-thumb"><img src="videos/${encDir}/${encF}.jpg" loading="lazy" onerror="this.style.display='none'"><div class="v-play"><span>▶</span></div></div>
+            <div class="v-meta"><h4>${WORKS_ALL[i].title}</h4></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+let lastVideo = null;
+function openVideo(i) {
+  const v = WORKS_ALL[i];
+  if (!v) return;
+  document.getElementById('vmTitle').textContent = v.title;
+  const video = document.getElementById('vmVideo');
+  video.poster = 'videos/' + encodeURI(v.dir) + '/' + encodeURI(v.file) + '.jpg';
+  video.src = 'videos/' + encodeURI(v.dir) + '/' + encodeURI(v.file);
+  lastVideo = video;
+  document.getElementById('videoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  video.load(); video.play().catch(()=>{});
+}
+function closeVideoModal() {
+  const video = document.getElementById('vmVideo');
+  video.pause(); video.removeAttribute('src'); video.load();
+  lastVideo = null;
+  document.getElementById('videoModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && lastVideo) { lastVideo.pause(); lastVideo.removeAttribute('src'); lastVideo.load(); lastVideo = null; } });
+document.addEventListener('DOMContentLoaded', renderWorks);
+document.getElementById('videoModal').addEventListener('click', e => { if (e.target.id === 'videoModal') closeVideoModal(); });
+
+</script>
+</body>
+</html>

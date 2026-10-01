@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 图像生成 - Ninth的提示词</title>
+<style>
+:root {
+  --bg: #0a0a10; --card: #12121c; --border: #262638;
+  --text: #e0e0f0; --text2: #9090b0; --text3: #606078;
+  --accent: #8B5CF6; --accent2: #A855F7; --red: #EF4444; --green: #10B981;
+  --radius: 12px; --font: 'Segoe UI', system-ui, sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f5f8; --card: #fff; --border: #e0e0e8;
+  --text: #1a1a2e; --text2: #666680; --text3: #999;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+a { color: var(--accent2); }
+
+/* Header */
+header {
+  display: flex; align-items: center; gap: 16px; padding: 16px 24px;
+  background: var(--card); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+header .logo { font-size: 18px; font-weight: 700; }
+header .logo span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+header nav { display: flex; gap: 12px; margin-left: auto; align-items: center; }
+header nav a { color: var(--text2); text-decoration: none; font-size: 14px; padding: 6px 12px; border-radius: 8px; transition: all 0.2s; }
+header nav a:hover, header nav a.active { color: var(--text); background: var(--border); }
+.theme-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 16px; }
+
+/* Layout */
+.container { max-width: 1300px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 480px 1fr; gap: 24px; }
+@media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
+
+/* Panels */
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.panel h2 { font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* Form elements */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
+.field select, .field input[type="text"], .field input[type="password"], .field textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13px; font-family: var(--font); background: var(--bg); color: var(--text);
+  outline: none; transition: border-color 0.2s;
+}
+.field select:focus, .field input:focus, .field textarea:focus { border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+.field small { font-size: 11px; color: var(--text3); margin-top: 2px; display: block; }
+
+/* Upload area */
+.upload-area {
+  border: 2px dashed var(--border); border-radius: var(--radius); padding: 24px;
+  text-align: center; cursor: pointer; transition: border-color 0.2s;
+  margin-bottom: 14px; position: relative;
+}
+.upload-area:hover { border-color: var(--accent); }
+.upload-area.has-image { padding: 8px; }
+.upload-area img { max-width: 100%; max-height: 200px; border-radius: 8px; display: block; margin: 0 auto; }
+.upload-area .placeholder { color: var(--text3); font-size: 13px; }
+.upload-area .remove-img {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--red); color: #fff; border: none; width: 24px; height: 24px;
+  border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; display: none;
+}
+.upload-area.has-image .remove-img { display: flex; align-items: center; justify-content: center; }
+
+/* Params row */
+.param-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Buttons */
+.btn {
+  padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  font-family: var(--font); cursor: pointer; border: none; transition: all 0.2s;
+}
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; width: 100%; padding: 14px; font-size: 15px; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+
+/* API key visibility */
+.api-key-wrap { position: relative; }
+.api-key-wrap input { padding-right: 40px; }
+.api-key-wrap .toggle-vis {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text3);
+}
+
+/* Result panel */
+#resultArea { display: flex; flex-direction: column; gap: 16px; }
+#resultDisplay { min-height: 300px; display: flex; align-items: center; justify-content: center; color: var(--text3); }
+#resultDisplay img { max-width: 100%; border-radius: var(--radius); }
+.result-actions { display: flex; gap: 8px; }
+.result-actions button { flex: 1; }
+
+/* Progress */
+.progress-wrap { margin: 16px 0; }
+.progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 3px; width: 0%; transition: width 0.5s; }
+.progress-text { font-size: 12px; color: var(--text2); text-align: center; margin-top: 6px; }
+
+/* History */
+.history-item {
+  padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  margin-bottom: 8px; cursor: pointer; transition: border-color 0.2s;
+  display: flex; gap: 10px; align-items: center;
+}
+.history-item:hover { border-color: var(--accent); }
+.history-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+.history-item .info { flex: 1; min-width: 0; }
+.history-item .info .prompt { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.history-item .info .meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Error */
+.error-msg { padding: 12px; border-radius: 8px; background: #FEE2E2; color: #DC2626; font-size: 13px; }
+[data-theme="dark"] .error-msg { background: #7F1D1D; color: #FCA5A5; }
+.success-msg { padding: 12px; border-radius: 8px; background: #D1FAE5; color: #059669; font-size: 13px; }
+[data-theme="dark"] .success-msg { background: #064E3B; color: #6EE7B7; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+  padding: 10px 24px; font-size: 14px; z-index: 999;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4); animation: toastIn 0.3s ease;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* Spinner */
+.spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>Ninth的提示词</span></div>
+  <nav>
+    <a href="index.html">提示词库</a>
+    <a href="generate.html" class="active">AI 生成</a>
+    <a href="video-generate.html">AI 视频</a>
+    <button class="theme-btn" onclick="toggleTheme()" title="切换主题">🌓</button>
+  </nav>
+</header>
+
+<div class="container">
+  <!-- 左侧：输入面板 -->
+  <div>
+    <div class="panel">
+      <h2>✨ AI 图像生成</h2>
+
+      <div class="field">
+        <label>模型</label>
+        <select id="modelSelect"></select>
+      </div>
+
+      <div class="param-row">
+        <div class="field" id="aspectField">
+          <label>画面比例</label>
+          <select id="aspectSelect"></select>
+        </div>
+        <div class="field" id="imgSizeField">
+          <label>分辨率</label>
+          <select id="imgSizeSelect"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>提示词</label>
+        <textarea id="promptInput" placeholder="描述你想要生成的图像内容...&#10;&#10;例如：一只金色的小狗在阳光下的麦田里奔跑，电影质感，4K"></textarea>
+      </div>
+
+      <div class="field">
+        <label>参考图片（可选，支持多张）</label>
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+          <div class="placeholder">📁 点击上传参考图片（可多选）</div>
+          <div class="upload-previews" id="uploadPreviews" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+          <button class="remove-img" onclick="event.stopPropagation(); clearUpload()">✕</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" onchange="handleUpload(event)">
+      </div>
+
+      <div class="field">
+        <label>API Token</label>
+        <div class="api-key-wrap">
+          <input type="password" id="apiKeyInput" placeholder="输入你的 API Token">
+          <button class="toggle-vis" onclick="toggleApiKeyVis()">👁</button>
+        </div>
+        <small>Token 仅保存在你的浏览器中，不会上传到任何服务器。</small>
+      </div>
+
+      <button class="btn btn-primary" id="genBtn" onclick="startGeneration()">
+        ⚡ 开始生成
+      </button>
+      <div class="progress-wrap" id="progressWrap" style="display:none;">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">排队中...</div>
+      </div>
+    </div>
+
+    <!-- 历史记录 -->
+    <div class="panel" style="margin-top:16px;">
+      <h2>📋 生成历史</h2>
+      <div id="historyList" style="max-height:300px;overflow-y:auto;">
+        <p style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">暂无记录</p>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:8px;" onclick="clearHistory()">清空历史</button>
+    </div>
+  </div>
+
+  <!-- 右侧：结果面板 -->
+  <div class="panel" id="resultPanel">
+    <h2>📺 生成结果</h2>
+    <div id="resultDisplay">
+      <p style="color:var(--text3);">输入提示词并点击生成，结果将显示在这里</p>
+    </div>
+    <div class="result-actions" id="resultActions" style="display:none;">
+      <button class="btn btn-primary" onclick="downloadResult()">💾 下载</button>
+      <button class="btn btn-outline" onclick="copyResult()">📋 复制到剪贴板</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== 全局状态 =====================
+const API_BASE = 'https://api.cphone.vip/v1';
+let currentModel = null;
+let uploadedImages = [];
+let lastResult = null;
+
+// ===================== DALL-E 尺寸映射 =====================
+// ⚠️ 2026-09-25：这张表**已经用不到了**（所有 dalle 模型都改成了 lockedQuality，
+//    尺寸直接取比例下拉里存的像素值；chat 模型走 image_config，不看这里）。
+//    留着是因为万一以后再加一支「清晰度可选」的 dalle 模型会回到这条路径。
+//    真要用之前先看这条：乘丰那几支生图**卡在约 157 万像素**，下面 2K/4K 两档出来的图是一样的，
+//    而且 4:3 / 3:4 那两行原本写错了（4K 都写成方形的 2048x2048）。别再照着抄。
+const DALLE_SIZE_MAP = {
+  '1:1':  { '1080P': '1024x1024', '2K': '2048x2048', '4K': '2048x2048' },
+  '16:9': { '1080P': '1280x720',  '2K': '2048x1152', '4K': '2048x1152' },
+  '9:16': { '1080P': '720x1280',  '2K': '1152x2048', '4K': '1152x2048' },
+  '4:3':  { '1080P': '1360x1024', '2K': '1360x1024', '4K': '1360x1024' },
+  '3:4':  { '1080P': '1024x1360', '2K': '1024x1360', '4K': '1024x1360' },
+};
+
+// ===================== 模型定义 =====================
+const ASPECTS = ['1:1','16:9','9:16','4:3','3:4'];
+const RESOLUTIONS = ['1080P','2K','4K'];
+
+/** 把 "3840x2160" 说成人话（锁定清晰度的模型，比例下拉直接用像素尺寸当值） */
+function sizeLabel(size) {
+  const parts = size.split('x');
+  const w = Number(parts[0]), h = Number(parts[1]);
+  if (w === h) return '方形 ' + size;
+  return (w > h ? '横屏 ' : '竖屏 ') + size;
+}
+
+const MODELS = [
+  // 2026-09-24 哥定：2.5 系的清晰度是**模型自带**的，界面不给改（横竖屏仍可选，见 sizes）。
+  //   带后缀那支能出真 4K，所以排在第一位当默认；无后缀那支只能 1K。
+  { id: 'gpt-image-2.5-flare', name: 'image2.5 4K', api: 'dalle', sizes: ['3840x2160','2160x3840'], lockedQuality: 'high' },
+  { id: 'gpt-image-2.5', name: 'image2.5 1K', api: 'dalle', sizes: ['1024x1024','1536x1024','1024x1536'], lockedQuality: 'low' },
+  // 2026-09-25 实测（直接打乘丰接口量真实出图尺寸）：这两支**卡在约 157 万像素**，
+  //   给 1024x1024 出 1254x1254、给 2048x2048 也出 1254x1254、给 1280x720 出 1672x941。
+  //   也就是说「1080P / 2K / 4K」三个选项出来的图**完全一样** —— 选了个寂寞。
+  //   所以跟 2.5 系一样锁死清晰度、只留横竖方三种比例，别让人以为选 4K 能更清晰。
+  { id: 'gpt-image-2', name: 'GPT Image 2（固定约 1K）', api: 'dalle', sizes: ['1024x1024','1536x1024','1024x1536'], lockedQuality: 'low' },
+  { id: 'gpt-4o-image', name: 'GPT Image（固定约 1K）', api: 'dalle', sizes: ['1024x1024','1536x1024','1024x1536'], lockedQuality: 'low' },
+  { id: 'gemini-2.5-flash-image-hd', name: 'Gemini 2.5 Flash 图像 HD', api: 'chat', defaultAspect: '1:1', defaultRes: '2K', maxRes: '2K' },
+  { id: 'gemini-3.1-flash-image-preview', name: 'Gemini 3.1 Flash 图像', api: 'chat', defaultAspect: '1:1', defaultRes: '2K', maxRes: '2K' },
+  { id: 'gemini-3-pro-image-preview', name: 'Gemini 3 Pro 图像', api: 'chat', defaultAspect: '16:9', defaultRes: '2K', maxRes: '4K' },
+];
+
+// ===================== 初始化 =====================
+document.addEventListener('DOMContentLoaded', () => {
+  // 主题
+  const saved = localStorage.getItem('generate-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches && !saved) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+  // API Key
+  const savedKey = localStorage.getItem('gen-api-token');
+  if (savedKey) document.getElementById('apiKeyInput').value = savedKey;
+  // 初始化模型列表（第一个就是默认 —— image2.5 4K）
+  const sel = document.getElementById('modelSelect');
+  sel.innerHTML = MODELS.map((m, i) => `<option value="${m.id}" ${i === 0 ? 'selected' : ''}>${m.name}</option>`).join('');
+  onModelChange();
+  // 历史
+  renderHistory();
+});
+
+function onModelChange() {
+  const id = document.getElementById('modelSelect').value;
+  currentModel = MODELS.find(m => m.id === id);
+  if (!currentModel) return;
+
+  // 锁定清晰度的模型（2.5 系）：清晰度是模型自带的，只给横/竖/方三种尺寸可选，
+  //   连分辨率下拉一起锁掉，免得学员选了 4K 却拿到 1K。
+  if (currentModel.lockedQuality) {
+    const labels = currentModel.sizes.map(sizeLabel);
+    popSelByLabel('aspectSelect', currentModel.sizes, labels, currentModel.sizes[0]);
+    popSelByLabel('imgSizeSelect', [currentModel.lockedQuality === 'high' ? '4K' : '1K'], [currentModel.lockedQuality === 'high' ? '4K（固定）' : '1K（固定）'], currentModel.lockedQuality === 'high' ? '4K' : '1K');
+    document.getElementById('imgSizeSelect').disabled = true;
+    return;
+  }
+
+  document.getElementById('imgSizeSelect').disabled = false;
+  // 根据模型的 maxRes 限制可用的分辨率选项
+  const maxRes = currentModel.maxRes || '4K';
+  const maxIdx = RESOLUTIONS.indexOf(maxRes);
+  const availRes = maxIdx >= 0 ? RESOLUTIONS.slice(0, maxIdx + 1) : RESOLUTIONS;
+
+  popSel('aspectSelect', ASPECTS, currentModel.defaultAspect || '1:1');
+  popSel('imgSizeSelect', availRes, currentModel.defaultRes || '1080P');
+}
+
+/** 值≠显示文案的下拉（锁定模型用像素尺寸当值，显示成「横屏 3840x2160」） */
+function popSelByLabel(id, values, labels, def) {
+  document.getElementById(id).innerHTML = values
+    .map((v, i) => `<option value="${v}" ${v === def ? 'selected' : ''}>${labels[i]}</option>`)
+    .join('');
+}
+
+function popSel(id, opts, def) {
+  document.getElementById(id).innerHTML = opts.map(o => `<option value="${o}" ${o===def?'selected':''}>${o}</option>`).join('');
+}
+
+document.getElementById('modelSelect').addEventListener('change', onModelChange);
+
+// ===================== 上传 =====================
+function handleUpload(e) {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+  const area = document.getElementById('uploadArea');
+  const previews = document.getElementById('uploadPreviews');
+  area.classList.add('has-image');
+
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      uploadedImages.push(ev.target.result);
+      const img = document.createElement('img');
+      img.src = ev.target.result;
+      img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;';
+      previews.appendChild(img);
+      // 每次读入完成后更新计数（FileReader 是异步的，不能在外面同步读 uploadedImages）
+      area.querySelector('.placeholder').textContent = `${uploadedImages.length} 张参考图`;
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('fileInput').value = '';
+}
+
+function clearUpload() {
+  uploadedImages = [];
+  const area = document.getElementById('uploadArea');
+  area.classList.remove('has-image');
+  area.querySelector('.placeholder').textContent = '📁 点击上传参考图片（可多选）';
+  document.getElementById('uploadPreviews').innerHTML = '';
+  document.getElementById('fileInput').value = '';
+}
+
+// ===================== 生成 =====================
+async function startGeneration() {
+  const prompt = document.getElementById('promptInput').value.trim();
+  if (!prompt) return toast('⚠️ 请输入提示词');
+  if (!currentModel) return toast('⚠️ 请选择模型');
+
+  let apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (!apiKey) return toast('⚠️ 请输入 API Token');
+  localStorage.setItem('gen-api-token', apiKey);
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 提交中...';
+  document.getElementById('resultDisplay').innerHTML = '<div class="spinner"></div>';
+  document.getElementById('resultActions').style.display = 'none';
+  hideProgress();
+
+  try {
+    await generateImage(prompt, apiKey);
+  } catch (e) {
+    document.getElementById('resultDisplay').innerHTML = `<div class="error-msg">❌ ${escHtml(e.message)}</div>`;
+    toast('生成失败: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ 开始生成';
+  }
+}
+
+async function generateImage(prompt, apiKey) {
+  const headers = { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' };
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 300000);
+  showProgress(30, '正在生成图像...');
+
+  const aspect = document.getElementById('aspectSelect').value;
+  const res = document.getElementById('imgSizeSelect').value;
+
+  let resp, data;
+  if (currentModel.api === 'dalle') {
+    // 锁定清晰度的模型：下拉里存的**就是**像素尺寸，直接拿来用（清晰度由模型自带，不看 res）
+    // 其余模型：用 aspect+resolution 映射到 DALL-E 尺寸
+    const sizeMap = DALLE_SIZE_MAP[aspect] || {};
+    const size = currentModel.lockedQuality ? aspect : (sizeMap[res] || '1024x1024');
+    if (uploadedImages.length) {
+      // 有参考图 → 走 /images/edits 图生图（multipart，浏览器自动带 boundary）
+      const fd = new FormData();
+      fd.append('model', currentModel.id);
+      fd.append('prompt', prompt);
+      fd.append('n', '1');
+      fd.append('size', size);
+      uploadedImages.forEach((u, i) => fd.append('image', dataURLtoBlob(u), `reference-${i}.png`));
+      resp = await fetch(API_BASE + '/images/edits', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + apiKey },
+        body: fd,
+        signal: ctrl.signal
+      });
+    } else {
+      const payload = { model: currentModel.id, prompt: prompt, n: 1, size: size };
+      resp = await fetch(API_BASE + '/images/generations', { method:'POST', headers, body: JSON.stringify(payload), signal: ctrl.signal });
+    }
+    data = await resp.json();
+    if (!resp.ok) throw new Error(data.error?.message || 'API 错误 ' + resp.status);
+    const images = (data.data || []).map(d => d.url || d.b64_json).filter(Boolean);
+    if (!images.length) throw new Error('API 未返回图像');
+    showResult({ urls: images, model: currentModel.name, prompt });
+  } else {
+    // Chat API (Gemini / Nano Banana): 用 image_config
+    const msgContent = uploadedImages.length
+      ? [...uploadedImages.map(u => ({ type: 'image_url', image_url: { url: u } })), { type: 'text', text: prompt }]
+      : prompt;
+    const payload = {
+      model: currentModel.id, max_tokens: 4096,
+      messages: [{ role: 'user', content: msgContent }],
+      image_config: { aspect_ratio: aspect, image_size: res },
+    };
+    resp = await fetch(API_BASE + '/chat/completions', { method:'POST', headers, body: JSON.stringify(payload), signal: ctrl.signal });
+    data = await resp.json();
+    if (!resp.ok) throw new Error(data.error?.message || 'API 错误 ' + resp.status);
+    const images = extractImages(data);
+    if (!images.length) throw new Error('API 未返回图像');
+    showResult({ urls: images, model: currentModel.name, prompt });
+  }
+  clearTimeout(timer);
+  hideProgress();
+}
+
+// ===================== 结果展示 =====================
+function showResult(result) {
+  lastResult = result;
+  const div = document.getElementById('resultDisplay');
+  div.innerHTML = result.urls.map(u => `<img src="${u}" alt="生成结果" style="max-width:100%;border-radius:12px;margin-bottom:8px;">`).join('');
+  document.getElementById('resultActions').style.display = 'flex';
+  try { localStorage.setItem('gen-last-result', JSON.stringify(result)); } catch(e) {}
+  saveHistory(result);
+  renderHistory();
+}
+
+// 页面加载时恢复上次结果
+(function() {
+  try {
+    const saved = localStorage.getItem('gen-last-result');
+    if (saved) {
+      lastResult = JSON.parse(saved);
+      const div = document.getElementById('resultDisplay');
+      div.innerHTML = lastResult.urls.map(u => `<img src="${u}" alt="" style="max-width:100%;border-radius:12px;">`).join('');
+      document.getElementById('resultActions').style.display = 'flex';
+    }
+  } catch(e) {}
+  renderHistory();
+})();
+
+function downloadResult() {
+  if (!lastResult) return;
+  lastResult.urls.forEach((url, i) => {
+    if (url.startsWith('data:')) {
+      const a = document.createElement('a'); a.href = url; a.download = `generated-${Date.now()}.png`; a.click();
+    } else {
+      window.open(url, '_blank');
+    }
+  });
+}
+
+async function copyResult() {
+  if (!lastResult) return;
+  if (lastResult.urls[0].startsWith('data:')) {
+    try {
+      const resp = await fetch(lastResult.urls[0]);
+      const blob = await resp.blob();
+      await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+      toast('✅ 已复制到剪贴板');
+    } catch (e) {
+      toast('⚠️ 复制失败，请用下载');
+    }
+  } else {
+    await navigator.clipboard.writeText(lastResult.urls[0]);
+    toast('✅ URL 已复制');
+  }
+}
+
+// ===================== 进度条 =====================
+function showProgress(pct, text) {
+  document.getElementById('progressWrap').style.display = '';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = text;
+}
+function hideProgress() { document.getElementById('progressWrap').style.display = 'none'; }
+
+// ===================== 历史记录 =====================
+function saveHistory(result) {
+  try {
+    let hist = JSON.parse(localStorage.getItem('gen-history') || '[]');
+    hist.unshift({
+      prompt: (result.prompt || '').slice(0, 200),
+      model: result.model, time: Date.now(), url: result.urls?.[0] || ''
+    });
+    if (hist.length > 30) hist = hist.slice(0, 30);
+    localStorage.setItem('gen-history', JSON.stringify(hist));
+  } catch(e) {}
+}
+
+function renderHistory() {
+  try {
+    const hist = JSON.parse(localStorage.getItem('gen-history') || '[]');
+    const el = document.getElementById('historyList');
+    if (!hist.length) {
+      el.innerHTML = '<p style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">暂无记录</p>';
+      return;
+    }
+    el.innerHTML = hist.map(h => `
+      <div class="history-item" onclick="loadHistoryItem('${escAttr(h.url)}','${escAttr(h.prompt)}')">
+        ${h.url && !h.url.startsWith('data:') ? `<img src="${h.url}" alt="" onerror="this.style.display='none'">` : '<span style="font-size:24px;">🖼️</span>'}
+        <div class="info">
+          <div class="prompt">${escHtml(h.prompt || '')}</div>
+          <div class="meta">${h.model} &middot; ${new Date(h.time).toLocaleString('zh-CN')}</div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {}
+}
+
+function loadHistoryItem(url, prompt) {
+  if (url) {
+    lastResult = { urls: [url], prompt: prompt || '', model: '' };
+    const div = document.getElementById('resultDisplay');
+    div.innerHTML = `<img src="${url}" alt="" style="max-width:100%;border-radius:12px;">`;
+    document.getElementById('resultActions').style.display = 'flex';
+    try { localStorage.setItem('gen-last-result', JSON.stringify(lastResult)); } catch(e) {}
+  }
+  if (prompt) {
+    document.getElementById('promptInput').value = prompt;
+  }
+}
+
+function clearHistory() {
+  localStorage.removeItem('gen-history');
+  renderHistory();
+  toast('🗑 历史已清空');
+}
+
+// ===================== 工具函数 =====================
+function extractImages(data) {
+  const images = [];
+  try {
+    for (const choice of (data.choices || [])) {
+      const msg = choice.message || {};
+      const content = msg.content;
+      if (Array.isArray(content)) {
+        for (const part of content) {
+          if (part.type === 'image_url' && part.image_url) images.push(part.image_url.url);
+          if (part.type === 'image' && part.source) images.push('data:image/png;base64,' + part.source.data);
+        }
+      } else if (typeof content === 'string') {
+        // 解析 markdown 格式: ![image](url)
+        const mdMatches = content.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/g);
+        if (mdMatches) {
+          for (const m of mdMatches) {
+            const urlMatch = m.match(/\((https?:\/\/[^\s)]+)\)/);
+            if (urlMatch) images.push(urlMatch[1]);
+          }
+        }
+      }
+      for (const img of (msg.images || [])) {
+        images.push(typeof img === 'string' ? img : img.url);
+      }
+    }
+  } catch(e) {}
+  return images.filter(Boolean);
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function dataURLtoBlob(dataURL) {
+  const parts = dataURL.split(',');
+  const mime = (parts[0].match(/:(.*?);/) || [])[1] || 'image/png';
+  const bin = atob(parts[1]);
+  const len = bin.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+function escAttr(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toggleApiKeyVis() {
+  const inp = document.getElementById('apiKeyInput');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('generate-theme', next);
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+</script>
+<a href="index.html" style="position:fixed;bottom:24px;left:24px;z-index:999;width:44px;height:44px;border-radius:50%;background:#fff;color:#666;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);" title="返回主页"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>
+</body>
+</html>
